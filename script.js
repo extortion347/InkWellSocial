@@ -139,15 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// & icon movement
 
-gsap.to(".sm2", {
-  scale: 1.2, // Increase size to 1.2 times
-  duration: 4, // Animation duration
-  ease: "power1.inOut", // Easing function
-  yoyo: true, // Yoyo effect (reverses animation)
-  repeat: -1 // Repeat indefinitely
-});
+
+
 
 //statistics cards js////////////////
 

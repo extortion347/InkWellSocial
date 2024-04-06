@@ -43,23 +43,8 @@ gsap.from(".fa-whatsapp", {
 document.addEventListener('DOMContentLoaded', function () {
     const menuToggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.menu');
-    const barsIcon = document.querySelector('.fa-bars');
-    const cancelIcon = document.querySelector('.fa-times');
-
-    // Initially, hide the cancel icon
-    cancelIcon.style.display = 'none';
 
     menuToggle.addEventListener('click', function () {
         menu.classList.toggle('active');
-
-        // Toggle the visibility of icons
-        if (menu.classList.contains('active')) {
-            barsIcon.style.display = 'none';
-            cancelIcon.style.display = 'inline-block'; // Make cancel icon visible
-        } else {
-            cancelIcon.style.display = 'none';
-            barsIcon.style.display = 'inline-block'; // Make bars icon visible
-        }
     });
 });
-
