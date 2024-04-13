@@ -1,235 +1,240 @@
 gsap.registerPlugin(ScrollTrigger);
 
-ScrollTrigger.defaults({
-  toggleActions: "play none none reverse"
-})
+window.addEventListener("DOMContentLoaded", () => {
+    const tl = gsap.timeline(
+        {
+            delay: 1
+        }
+    );
+
+    tl.to(".preloader", {
+        opacity: 0,
+        ease: "power3.out",
+        duration: 1,
+    });
+
+    tl.to(".preloader",
+        {
+            display: "none",
+            duration: 0
+        });
+
+    tl.from("h1",
+        {
+            y: 100,
+            opacity: 0
+        })
+
+    tl.from(".mouse-scroll", {
+        y: 50,
+        opacity: 0
+    });
+});
 
 
-gsap.to('.img-container', {
-  scale: 52,
-  ease: "ease",
-  scrollTrigger: {
-    trigger: '.video-section',
-    scrub: 1,
-    start: "top top",
-    end: "bottom",
-    pin: true
-  }
-})
-
-
-gsap.to('.right', {
-  autoAlpha: 0,
-  x: 500,
-  duration: 1.5,
-  scrollTrigger: {
-    start: 1
-  }
-})
-gsap.to('.left', {
-  autoAlpha: 0,
-  x: -500,
-  duration: 1.5,
-  scrollTrigger: {
-    start: 1
-  }
-})
-
-
-gsap.to('.txt-bottom', {
-  autoAlpha: 0,
-  letterSpacing: -10,
-  duration: 2,
-  scrollTrigger: {
-    start: 2
-  }
-})
-
-
-const tl = gsap.timeline();
-
-tl.from('.left-side div', {
-  y: 150,
-  opacity: 0,
-  stagger: {
-    amount: .4
-  },
-  delay: .5
-}).from('.right-side', { opacity: 0, duration: 2 }, .5)
-  .to('.wrapper', { x: -window.innerWidth })
-
-
-
-ScrollTrigger.create({
-  animation: tl,
-  trigger: '.wrapper',
-  start: "top top",
-  end: "+=600",
-  scrub: 1,
-  pin: true,
-  ease: "ease"
-})
-
-
-
-gsap.utils.toArray('.col').forEach(image => {
-  gsap.fromTo(image, {
-    opacity: .3,
-    x: 0
-  }, {
-    opacity: 1,
-    x: -50,
+// Banner parallax animation
+gsap.to(".bg-image", {
+    y: 200,
     scrollTrigger: {
-      trigger: image,
-      start: "10%",
-      stagger: {
-        amount: .4
-      }
+        trigger: ".hero",
+        start: "top top",
+        scrub: true,
     }
-  })
 })
 
-const timeline = gsap.timeline();
+// Image parallax animations
 
-timeline.from('.title span', {
-  y: 150,
-  skewY: 7,
-  duration: 3
-}).from('.txt-bottom', {
-  letterSpacing: -10,
-  opacity: 0,
-  duration: 3
+const images = gsap.utils.toArray(".image img");
+images.forEach(image => {
+    gsap.to(image,
+        {
+            y: 200,
+            scrollTrigger: {
+                trigger: image.parentElement,
+                scrub: true,
+            }
+        });
+});
+
+
+// Title fadeup animations
+const titles = gsap.utils.toArray("h2");
+titles.forEach(title => {
+    gsap.from(title,
+        {
+            y: 100,
+            opacity: 0,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: title,
+            }
+        });
+});
+
+
+// Initialize Lenis Smooth Scroll
+const lenis = new Lenis();
+
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+
+
+// Mouse Tracker
+
+const tracker = documnet.querySelector(".tracker");
+
+let scrollAmount = 0;
+
+let yPos = 0;
+let xPos = 0;
+
+
+function mouseTracker() {
+    scrollAmount = window.scrollY + yPos;
+
+
+    tracker.style.top = `${scrollAmount}px`;
+    tracker.style.left = `${xPos}px`;
+}
+
+window.addEventListener("mousemove", e => {
+    setTimeout(() => {
+        yPos = e.clientY - tracker.offsetHeight / 2;
+        xPos = e.clientX - tracker.offsetWidth / 2;
+
+        mouseTracker();
+
+    }, 100);
+});
+
+window.addEventListener("scroll", () => {
+    mouseTracker();
 })
 
+// Select all links on the page
+const links = document.querySelectorAll("a");
 
-window.addEventListener('scroll', function () {
-  var scrollPosition = window.scrollY;
-  var vContainer = document.querySelector('.v_container');
-
-  if (scrollPosition > 100) {
-    vContainer.classList.add('show-bottom-icons');
-  } else {
-    vContainer.classList.remove('show-bottom-icons');
-  }
-});
-
-
-gsap.to('.fa-arrow-right-long', {
-  x: 20, // Move 20 pixels to the right
-  repeat: -1, // Repeat infinitely
-  yoyo: true, // Reverse animation
-  duration: 5, // Duration of the animation (5 seconds)
-  ease: 'slow(0.7, 0.7, false)' // Custom ease for slow movement
-});
-
-
-
-// Navbar js////////////
-// JavaScript code for handling click event to set active class
-document.addEventListener("DOMContentLoaded", function () {
-  var links = document.querySelectorAll(".menu li a");
-  links.forEach(function (link) {
-    link.addEventListener("click", function () {
-      links.forEach(function (otherLink) {
-        otherLink.classList.remove("active");
-      });
-      link.classList.add("active");
+links.forEach(link => {
+    link.addEventListener("mouseenter", () => {
+        tracker.style.display = "none";
     });
-  });
-});
 
-
-
-
-
-
-//statistics cards js////////////////
-
-// Detect when the statistics div comes into view
-document.addEventListener("scroll", function () {
-  var statisticsDiv = document.getElementById("statistics");
-  var statisticsPosition = statisticsDiv.getBoundingClientRect().top;
-  var screenPosition = window.innerHeight;
-
-  console.log("Statistics Position:", statisticsPosition);
-
-  // If statistics div is in view
-  if (statisticsPosition < screenPosition) {
-    // Animate numbers with different end values
-    animateNumbers([40, 85, 97]); // Example end values
-    // Remove event listener to prevent repeated animations
-    document.removeEventListener("scroll", this);
-  }
-});
-
-function animateNumbers(endValues) {
-  var numbers = document.querySelectorAll(".number");
-
-  // Animate each number
-  numbers.forEach(function (number, index) {
-    var endValue = endValues[index]; // Get the end value for this number
-
-    var animation = gsap.to(number, {
-      duration: 2,
-      innerText: endValue,
-      ease: "power2.out",
-      onUpdate: function () {
-        // Update the displayed number during the animation
-        number.innerText = Math.ceil(animation.progress() * endValue);
-      }
+    link.addEventListener("mouseleave", () => {
+        tracker.style.display = "block";
     });
-  });
+});
+
+// To disable mouse tracker on touchscreen device
+if ('ontouchstart' in window || navigator.maxTouchPoints) {
+    tracker.style.display = "none";
 }
 
 
+//NAV 
+
+gsap.from(".nav-item", {
+    duration: 1,
+    y: -50,
+    opacity: 0,
+    stagger: 0.2, // Stagger the animation for each navbar item
+    ease: "power2.out", // Use ease-out animation
+    delay: 0.9 // Delay the animation
+});
 
 
+gsap.from(".logo", {
+    duration: 1,
+    y: -50,
+    opacity: 0,
+    stagger: 0.2, // Stagger the animation for each navbar item
+    ease: "power2.out", // Use ease-out animation
+    delay: 0.5 // Delay the animation
+});
 
-// SERVICES DIV FUNCTIONALITY
+gsap.from(".fa-whatsapp", {
+    duration: 1,
+    z: -50,
+    opacity: 0,
+
+    ease: "power2.out", // Use ease-out animation
+    delay: 0.9 // Delay the animation
+});
+
+
+// function toggleMenu() {
+//   var menu = document.getElementById("menu");
+//   if (menu.style.display === "block") {
+//     menu.style.display = "none";
+//   } else {
+//     menu.style.display = "block";
+//   }
+// }
+
 document.addEventListener('DOMContentLoaded', function () {
-  const cards = document.querySelectorAll('.service-card');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.menu');
+    const barsIcon = document.querySelector('.fa-bars');
+    const cancelIcon = document.querySelector('.fa-times');
 
-  gsap.registerPlugin(ScrollTrigger);
+    // Initially, hide the cancel icon
+    cancelIcon.style.display = 'none';
 
-  cards.forEach((card, index) => {
-    gsap.fromTo(
-      card,
-      {
-        autoAlpha: 0,
-        scale: 0.5, // Initial scale
-        z: -200, // Move card behind the screen
-      },
-      {
-        autoAlpha: 1,
-        scale: 1, // Final scale
-        z: 0,
-        duration: 1, // Duration of the animation
-        scrollTrigger: {
-          trigger: card,
-          scrub: true, // Enables "scrubbing" behavior, making the animation follow the scroll position smoothly
-          toggleActions: 'play none none reverse', // Play the animation when the card enters the viewport, and reverse it when it exits
-          start: 'top 1%',
-          // markers: true, 
-        },
-      }
-    );
-  });
+    menuToggle.addEventListener('click', function () {
+        menu.classList.toggle('active');
+
+        // Toggle the visibility of icons
+        if (menu.classList.contains('active')) {
+            barsIcon.style.display = 'none';
+            cancelIcon.style.display = 'inline-block'; // Make cancel icon visible
+        } else {
+            cancelIcon.style.display = 'none';
+            barsIcon.style.display = 'inline-block'; // Make bars icon visible
+        }
+    });
 });
 
 
-// GSAP timeline for the animation
-const servtl = gsap.timeline({
-  scrollTrigger: {
-    trigger: "#services",
-    start: "top center", // Change this as needed
-    scrub: true, // Enable scrubbing
-  }
+// Navbar js////////////
+document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.querySelector(".menu-toggle");
+    const menu = document.querySelector(".menu");
+
+    toggle.addEventListener("click", function () {
+        menu.classList.toggle("active");
+        toggle.classList.toggle("hide");
+    });
+
+    const links = document.querySelectorAll(".menu li a");
+    links.forEach(function (link) {
+        link.addEventListener("click", function () {
+            links.forEach(otherLink => otherLink.classList.remove("active"));
+            link.classList.add("active");
+            menu.classList.remove("active"); // Close the menu on link click
+        });
+    });
 });
 
-// Animation sequence for each service element
-servtl.from(".elem", {
-  x: "-100%", // Start from left
-  opacity: 0,
-  stagger: 0.2 // Stagger the animation
+
+
+
+
+
+// Why Choose Us
+
+document.querySelectorAll('.letter-card').forEach(card => {
+    card.addEventListener('mouseover', function () {
+        document.getElementById('letter-detail').textContent = this.getAttribute('data-detail');
+    });
+    card.addEventListener('mouseout', function () {
+        document.getElementById('letter-detail').textContent = '';
+    });
 });
+
+
+
+
 

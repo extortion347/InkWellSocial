@@ -1,8 +1,3 @@
-
-
-
-
-
 // FAQ section js
 // Select all elements with the class "new-faq"
 const faqs = document.querySelectorAll(".new-faq");
