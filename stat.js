@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function animateNumber(element, finalNumber) {
     let currentNumber = 0;
     const increment = finalNumber / 100;  // Determine increment step
+    const isPercentage = element.textContent.trim().endsWith('%'); // Check if initial text ends with %
 
     const interval = setInterval(() => {
         currentNumber += increment;
@@ -29,11 +30,12 @@ function animateNumber(element, finalNumber) {
             clearInterval(interval);
         }
         element.textContent = Math.floor(currentNumber);
-        if (element.textContent.includes('%') === false && finalNumber.toString().includes('%')) {
-            element.textContent += '%';  // Append '%' if needed
+        if (isPercentage) { // Append '%' if initial text contained it
+            element.textContent += '%';
         }
     }, 20);  // Adjust time to control speed
 }
+
 
 
 

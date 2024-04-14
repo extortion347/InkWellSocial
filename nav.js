@@ -1,50 +1,28 @@
-
-
-//NAV 
-
-gsap.from(".nav-item", {
-    duration: 1,
-    y: -50,
-    opacity: 0,
-    stagger: 0.2, // Stagger the animation for each navbar item
-    ease: "power2.out", // Use ease-out animation
-    delay: 0.9 // Delay the animation
-});
-
-
-gsap.from(".logo", {
-    duration: 1,
-    y: -50,
-    opacity: 0,
-    stagger: 0.2, // Stagger the animation for each navbar item
-    ease: "power2.out", // Use ease-out animation
-    delay: 0.5 // Delay the animation
-});
-
-gsap.from(".fa-whatsapp", {
-    duration: 1,
-    z: -50,
-    opacity: 0,
-
-    ease: "power2.out", // Use ease-out animation
-    delay: 0.9 // Delay the animation
-});
-
-
-// function toggleMenu() {
-//   var menu = document.getElementById("menu");
-//   if (menu.style.display === "block") {
-//     menu.style.display = "none";
-//   } else {
-//     menu.style.display = "block";
-//   }
-// }
-
 document.addEventListener('DOMContentLoaded', function () {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const menu = document.querySelector('.menu');
+    const iconWrapper = document.querySelector('.icon-wrapper');
+    const iconBars = document.querySelector('.fa-bars');
+    const iconTimes = document.querySelector('.fa-times');
+    const navbarCollapse = document.getElementById('navbarSupportedContent');
 
-    menuToggle.addEventListener('click', function () {
-        menu.classList.toggle('active');
+    iconWrapper.addEventListener('click', function () {
+        const isExpanded = iconBars.style.display === 'none';
+
+        if (!isExpanded) {
+            iconBars.style.display = 'none';
+            iconBars.style.opacity = '0';
+            iconBars.style.visibility = 'hidden';
+            iconTimes.style.display = 'block';
+            iconTimes.style.opacity = '1';
+            iconTimes.style.visibility = 'visible';
+            navbarCollapse.classList.toggle('show');  // Toggles the show class
+        } else {
+            iconBars.style.display = 'block';
+            iconBars.style.opacity = '1';
+            iconBars.style.visibility = 'visible';
+            iconTimes.style.display = 'none';
+            iconTimes.style.opacity = '0';
+            iconTimes.style.visibility = 'hidden';
+            navbarCollapse.classList.toggle('show');  // Toggles the show class
+        }
     });
 });
